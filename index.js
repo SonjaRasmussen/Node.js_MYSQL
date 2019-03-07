@@ -12,19 +12,10 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err){
     if(err) throw err;
-    readProducts();
+   
     showStore();
 });
 
-function readProducts() {
-    console.log("Selecting all products...\n");
-    connection.query("SELECT * FROM products", function (err, res) {
-      if (err) throw err;
-      // Log all results of the SELECT statement
-      console.log(res);
-      connection.end();
-    });
-  }
 
 let stock = 0;
 let updateQuantity = 0;
@@ -39,7 +30,7 @@ let updateQuantity = 0;
      var tableArr = [];
      var query = "SELECT * FROM products";
      connection.query(query, function(err, rows){
-        if (err) throw err;
+       
          for(i=0; i< rows.length; i++){
              tableArr.push([rows[i].item_id, rows[i].product_name, rows[i].price]);
         }
@@ -76,7 +67,7 @@ function checkProduct(id, quantity) {
   
     var query = "SELECT stock_quantity FROM products WHERE ?";
   
-    connection.query(query, {item_id: id}, function(res){
+    connection.query(query, {item_id: id}, function(err,res){
        
   
         stock = res[0].stock_quantity;
@@ -97,7 +88,7 @@ function checkProduct(id, quantity) {
 
      var query = "UPDATE products SET ? WHERE ?";
 
-     connection.query(query, [{stock_quantity: updatedQuantity},{item_id}], function(err, res){
+     connection.query(query, [{stock_quantity: updatedQuantity},{item_id: id}], function(err, res){
         console.log("Purcahse is successful!");
         showPrice(id,quantity);
         }   
