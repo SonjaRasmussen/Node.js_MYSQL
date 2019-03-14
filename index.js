@@ -18,6 +18,7 @@ connection.connect(function(err){
 
 
 let stock = 0;
+let product_sales = 0;
 let updateQuantity = 0;
 
 
@@ -65,16 +66,17 @@ function runSearch(){
 function checkProduct(id, quantity) {
     console.log("Checking availability...");
   
-    var query = "SELECT stock_quantity FROM products WHERE ?";
+    var query = "SELECT stock_quantity, price, product_sales FROM products WHERE ?";
   
     connection.query(query, {item_id: id}, function(err,res){
        
   
         stock = res[0].stock_quantity;
+        product_sales = res[0].product_sales;
   
         if(res[0].stock_quantity >= quantity) {
           console.log("We have availability! Purchasing now!");
-          buyProduct(id, quantity);
+          buyProduct(id, quantity, quantity * res[0].price);
         } else {
           console.log("Insufficient quantity!");
           connection.end();
@@ -83,12 +85,13 @@ function checkProduct(id, quantity) {
   }; 
   
 
- function buyProduct(id, quantity){
+ function buyProduct(id, quantity, purchase_price){
      updatedQuantity = stock - quantity;
+     product_sales = product_sales + purchase_price;
 
      var query = "UPDATE products SET ? WHERE ?";
 
-     connection.query(query, [{stock_quantity: updatedQuantity},{item_id: id}], function(err, res){
+     connection.query(query, [{stock_quantity: updatedQuantity, product_sales: product_sales},{item_id: id}], function(err, res){
         console.log("Purcahse is successful!");
         showPrice(id,quantity);
         }   
@@ -105,3 +108,4 @@ function checkProduct(id, quantity) {
          connection.end();
      });
  };
+
