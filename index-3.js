@@ -26,21 +26,21 @@ function supervisorView(){
         type: 'rawlist',
         message: "What would you like to do ?",
         choices: [
-            '1. View Sales By Department', 
-            '2. Create New Department'
+            { name: '1. View Sales By Department', value: 'view sales' },
+            { name: '2. Create New Department', value: 'add new' },
+            { name: '3. Exit', value: 'exit' }
         ]
     }).then(function(answer){
-        console.log("You chose: " + util.inspect(answer));
         switch (answer.action){  
-        case "1. View Sales By Department":
+        case "view sales":
         viewSales();
         break;    
         
-       case "Create new department":
+       case "add new":
         createNewDepartment();
         break;    
         
-        case "Exit":
+        case "exit":
         exit();
        break;
     
@@ -56,7 +56,7 @@ function viewSales(){
     });
 
     var tableArr = [];
-    var query = "SELECT d.department_id, d.department_name, overhead_cost, SUM(product_sales) AS dept_sales, (SUM(product_sales) - overhead_Cost) AS total_profit FROM bamazonDB.departments d JOIN bamazonDB.products p ON d.department_name = p.department_name GROUP BY d.department_id, d.department_name, overhead_cost";
+    var query = "SELECT d.department_id, d.department_name, overhead_cost, IFNULL(SUM(product_sales),0) AS dept_sales, (IFNULL(SUM(product_sales),0) - overhead_Cost) AS total_profit FROM bamazonDB.departments d LEFT JOIN bamazonDB.products p ON d.department_name = p.department_name GROUP BY d.department_id, d.department_name, overhead_cost";
         
         
         connection.query(query, function(err, rows) {
@@ -74,18 +74,19 @@ function viewSales(){
     
 function createNewDepartment(){
     inquirer.prompt([
-        {
+    {
         name: "department_name",
-        type: " input",
-        message: " What is the new department name? "
+        type: "input",
+        message: "What is the new department name?"
     },
     {   name : "overhead_cost",
         type: "input",
-        message: "What is the overhead_cost of this department? "
+        message: "What is the overhead_cost of this department?"
+    }
 
-    }]).then(function(answer){
+]).then(function(answer){
 
-        connection.query("INSERT INTO departments SET ?", 
+        var query = connection.query("INSERT INTO departments SET ?", 
         {
             department_name: answer.department_name,
             overhead_cost: answer.overhead_cost
@@ -93,7 +94,8 @@ function createNewDepartment(){
         
         function (err, res){
             if (err){
-                throw err;
+                console.log("This department can't be added: " + err);
+                supervisorView();
             } else {
                 console.log("The department was added successfully!");
                 supervisorView();
@@ -102,3 +104,7 @@ function createNewDepartment(){
         });
     });
 };
+
+function exit() {
+    connection.end();
+}

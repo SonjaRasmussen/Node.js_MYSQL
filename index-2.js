@@ -117,6 +117,7 @@ function addInventory(){
         }
 
         console.log(table.toString());
+        
         inquirer.prompt([
             {
                 name: "id",
@@ -178,7 +179,7 @@ function addInventory(){
             {
                 product_name: answers.product,
                 department_name: answers.department,
-                price: answers.quantity,
+                price: answers.price,
                 stock_quantity: answers.quantity
             },
 
@@ -193,3 +194,4 @@ function addInventory(){
     function exit(){
         connection.end();
     }
+    

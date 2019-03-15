@@ -27,10 +27,6 @@ let updateQuantity = 0;
          head: ["Item ID", "Product Name", "Price"]
     });
 
-
-     var tableArr = [];
-     var query = "SELECT * FROM products";
-     connection.query(query, function(err, rows){
        
          for(i=0; i< rows.length; i++){
              tableArr.push([rows[i].item_id, rows[i].product_name, rows[i].price]);
@@ -79,7 +75,7 @@ function checkProduct(id, quantity) {
           buyProduct(id, quantity, quantity * res[0].price);
         } else {
           console.log("Insufficient quantity!");
-          connection.end();
+          showStore();
         };
     });
   }; 
