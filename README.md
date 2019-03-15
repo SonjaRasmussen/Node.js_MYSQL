@@ -2,7 +2,8 @@
 
 
 ## Week #12 Assignment
-This week we created an Amazon-like store with the MySQL. The app will;
+This week we created an Amazon-like store with MySQL. 
+###### The app will;
  * take in orders from customers 
  * add and deplete stock from the store's inventory 
  * add new inventory  
@@ -14,12 +15,14 @@ This week we created an Amazon-like store with the MySQL. The app will;
  
 
 ## Getting Started
-* Clone repo.
-* Run command in Terminal npm install
+* Clone repo
+* npm install
+* Run command in Terminal 
+
 
 
 ## Customer
-Run command node index.js
+Run command $ node index.js
 
 #### What This Does
 * Displays the table of products
@@ -32,15 +35,19 @@ Run command node index.js
 
 
 ## Manager
-Run command node index-2.js
+Run command $ node index-2.js
 
 
 #### What This Does
-Provides a menu of options to View Products, View Low Inventory, Add to Inventory, and Add New Products
+Provides a menu of options and actions;
+* 1. View Products
+* 2. View Low Inventory 
+* 3. Add to Inventory
+* 4. Add New Products
 
 ## Supervisor
-Run command node index-3.js
+Run command $ node index-3.js
 
 #### What This Does
-View sales by department
-Add new departments
+* View sales by department
+* Add new departments
